@@ -7,7 +7,7 @@ $(document).ready(function () {
     const num = Math.floor(Math.random() * (max - min + 1)) + min;
     return num.toString().padStart(6, "0")
   };
-  $('#invoice-number').val('IG' + getRandomId());
+  $('#invoice-number').val('IG-' + getRandomId());
 
   $.validator.setDefaults({
 		submitHandler: function() {
@@ -143,7 +143,58 @@ function subTotalCalc() {
   $('#sub-total-with-tax').val(subTotalWithTax);
 }
 
+function setInvoiceValues() {
+  let tableHtml = '';
+  let name = $("input[name='name[]']").map(function(){return $(this).val();}).get();
+  let unit = $("input[name='unit[]']").map(function(){return $(this).val();}).get();
+  let unitPrice = $("input[name='unitPrice[]']").map(function(){return $(this).val();}).get();
+  let tax = $("select[name='tax[]']").map(function(){
+    return $(this).val();
+  }).get();
+  let amount = $("input[name='amount[]']").map(function(){return $(this).val();}).get();
+  
+  $.each(amount, function (i) {
+    let j= i+1;
+    tableHtml += '<tr class="list-item"><td data-label="no" class="tableitem">'+j+'</td><td data-label="name" class="tableitem">'+name[i]+'</td><td data-label="unit" class="tableitem">'+unit[i]+'</td><td data-label="unitPrice" class="tableitem">$ '+unitPrice[i]+'</td><td data-label="tax" class="tableitem">'+tax[i]+' %</td><td data-label="no" class="tableitem">$ '+amount[i]+'</td></tr>';
+  });
+  $('#table-main').html(tableHtml);
+  $('#invoiceNumber').html($('#invoice-number').val());
+  let date = moment($('#invoice-date').val()).format('DD/MM/YYYY');
+  $('#invoiceDate').html(date);
+  $('#toName').html($('#to-name').val());
+  $('#toAddress').html($('#to-address').val());
+  $('#fromName').html($('#from-name').val());
+  $('#fromAddress').html($('#from-address').val());
+  let discount = $('#discount').val();
+  if(discount === 'PERCENTAGE') {
+    $('#discount-value-print').html($('#discount-value').val()+ ' %');
+  } else {
+    $('#discount-value-print').html('$ ' +$('#discount-value').val());
+  }
+
+  $('#sub-total-without-tax-print').html('$ ' +$('#sub-total-without-tax').val());
+  $('#sub-total-with-tax-print').html('$ ' +$('#sub-total-with-tax').val());
+}
+
 function setInvoice() {
-  alert('setInvoice');
+  setInvoiceValues();
+  let contents = $("#invoiceholder").html();
+  let frame1 = $('<iframe />');
+  frame1[0].name = "frame1";
+  frame1.css({ "position": "absolute", "top": "-1000000px" });
+  $("body").append(frame1);
+  let frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+  frameDoc.document.open();
+  frameDoc.document.write('<html><head><title>Invoice</title>');
+  frameDoc.document.write('</head><body>');
+  frameDoc.document.write('<link rel="stylesheet" href="assets/css/invoice-style.css">');
+  frameDoc.document.write(contents);
+  frameDoc.document.write('</body></html>');
+  frameDoc.document.close();
+  setTimeout(function () {
+    window.frames["frame1"].focus();
+    window.frames["frame1"].print();
+    frame1.remove();
+  }, 500);
 }
 

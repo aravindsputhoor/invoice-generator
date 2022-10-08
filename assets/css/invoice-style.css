@@ -20,6 +20,12 @@ body {
   color: #FFF;
 }
 
+.address{
+  text-align: justify;
+  width: 200px;
+  white-space: pre-wrap;
+}
+
 .clearfix::after {
   content: "";
   clear: both;

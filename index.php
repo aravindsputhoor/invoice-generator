@@ -7,7 +7,6 @@
   <title>Invoice Generator</title>
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/invoice-style.css">
   <link rel="stylesheet" href="assets/css/cmxform.css">
   <link href="assets/font-awesome/css/all.css" rel="stylesheet">
   <script src="assets/js/jquery.min.js"></script>
@@ -35,7 +34,7 @@
             <tr>
               <th class="text-center">INVOICE DATE</th>
               <td class="text-center">
-                <input type="date" class="form-control" name='invoiceDate' id="invoice-date" max="<?=date('Y-m-d');?>" required />
+                <input type="date" class="form-control" name='invoiceDate' id="invoice-date" max="<?=date('Y-m-d');?>" value="<?php echo date('Y-m-d'); ?>" required />
               </td>
             </tr>
           </tbody>
@@ -87,7 +86,7 @@
             <tr></tr>
               <th class="text-center"> Name </th>
               <th class="text-center"> Unit </th>
-              <th class="text-center"> Unit Price($) </th>
+              <th class="text-center"> Unit Price</th>
               <th class="text-center"> Tax </th>
               <th class="text-center"> Total Amount </th>
               <th class="text-center"></th>
@@ -171,32 +170,31 @@
   </form>
   </div>
 
-  <div id="invoiceholder">
+<!----Invoice temp --->
+<div id="invoice-html" style="display: none;">
+  <div id="invoiceholder" >
   <div id="invoice" class="effect2">
-
     <div id="invoice-top">
-
       <div class="title">
-        <h1>Invoice #<span class="invoiceVal invoice_num">tst-inv-23</span></h1>
-        <p>Invoice Date: <span id="invoice_date">01 Feb 2018</span>
+        <h1>Invoice #<span class="invoiceVal invoice_num" id="invoiceNumber"></span></h1>
+        <p>Invoice Date: <span id="invoiceDate"></span>
         </p>
       </div>
     </div>
-
     <div id="invoice-mid">
         <div class="clearfix">
             <div class="col-left">
                 <p>BILL/SHIP TO:</p>
                 <div class="clientinfo">
-                    <h2 id="supplier">TESI S.P.A.</h2>
-                    <p><span id="address">VIA SAVIGLIANO, 48</span><br><span id="city">RORETO DI CHERASCO</span><br><span id="country">IT</span> - <span id="zip">12062</span><br><span id="tax_num">555-555-5555</span><br></p>
+                    <h2 id="toName"></h2>
+                    <p class="address"><span id="toAddress"></span><br></p>
                 </div>
             </div>
             <div class="col-right">
               <p>FROM:</p>
               <div class="clientinfo">
-                  <h2 id="supplier">TESI S.P.A.</h2>
-                  <p><span id="address">VIA SAVIGLIANO, 48czdczdczascascascdacsacs</span><br><span id="city">RORETO DI CHERASCO</span><br><span id="country">IT</span> - <span id="zip">12062</span><br><span id="tax_num">555-555-5555</span><br></p>
+                  <h2 id="fromName"></h2>
+                  <p class="address"><span id="fromAddress"></span><br></p>
               </div>
             </div>
         </div>
@@ -204,30 +202,18 @@
 
     <div id="invoice-bot">
       <div id="table">
-        <table class="table-main">
+        <table class="table-main" >
           <thead>
               <tr class="tabletitle">
-                <th>Type</th>
-                <th>Description</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Total</th>
+                <th>#</th>
+                <th>Name</th>
+                <th>Unit</th>
+                <th>Unit Price($)</th>
+                <th>Tax</th>
+                <th>Total Amount</th>
               </tr>
           </thead>
-          <tr class="list-item">
-            <td data-label="Type" class="tableitem">ITEM</td>
-            <td data-label="Description" class="tableitem">Servizio EDI + Traffico mese di novembre 2017</td>
-            <td data-label="Quantity" class="tableitem">46.6</td>
-            <td data-label="Unit Price" class="tableitem">1</td>
-            <td data-label="Total" class="tableitem">55.92</td>
-          </tr>
-         <tr class="list-item">
-            <td data-label="Type" class="tableitem">ITEM</td>
-            <td data-label="Description" class="tableitem">Traffico mese di novembre 2017 FRESSNAPF TIERNAHRUNGS GMBH riadd. Almo DE</td>
-            <td data-label="Quantity" class="tableitem">4.4</td>
-            <td data-label="Unit Price" class="tableitem">1</td>
-            <td data-label="Total" class="tableitem">55.92</td>
-          </tr>
+          <tbody id="table-main"></tbody>
         </table>
       </div>
 
@@ -235,22 +221,25 @@
         <table class="table">
             <tbody>
                 <tr>
-                    <td><span>Invoice Total</span><label id="invoice_total">61.2</label></td>
-                    <td><span>Currency</span><label id="currency">EUR</label></td>
+                    <td><span>Discount</span><label id="discount-value-print"></label></td>
                 </tr>
                 <tr>
-                    <td><span>Payment Term</span><label id="payment_term">60 gg DFFM</label></td>
-                    <td><span>Invoice Type</span><label id="invoice_type">EXP REP INV</label></td>
+                    <td><span>Subtotal without tax</span><label id="sub-total-without-tax-print"></label></td>
                 </tr>
-                <tr><td colspan="2"><span>Note</span>#<label id="note">None</label></td></tr>
+                <tr>
+                    <td><span>Subtotal with tax</span><label id="sub-total-with-tax-print"></label></td>
+                </tr>
             </tbody>
         </table>
     </div><br>
     </div>
   </div>
 </div>
+</div>
+<!----Invoice temp end--->
 
   <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/moment.min.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>
