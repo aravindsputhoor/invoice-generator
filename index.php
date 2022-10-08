@@ -4,22 +4,22 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice generator</title>
+  <title>Invoice Generator</title>
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
   <link href="assets/font-awesome/css/all.css" rel="stylesheet">
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/jquery.validate.min.js"></script>
-  <script src="assets/js/bootstrap.min.js"></script>
 </head>
 <body>
   <nav class = "navbar navbar-default" role = "navigation">
       <div class = "navbar-header">
-        <a class = "navbar-brand">Invoice generator</a>
+        <a class = "navbar-brand">Invoice Generator</a>
       </div>
   </nav>
 
   <div class="container">
+    <form id="invoice-generator-form">
     <div class="row clearfix mt-2">
       <div class="col-md-4">
         <table class="table table-bordered table-hover" id="tab_logic_total">
@@ -91,13 +91,13 @@
               <th class="text-center"></th>
             </tr>
           </thead>
-          <tbody>
-            <tr id="addr0">
-              <td><input type="text" name='name[]'  placeholder='Enter the item name' class="form-control"/></td>
-              <td><input type="number" name='unit[]' min="1" value="1"  placeholder='Enter unit' class="form-control"/></td>
-              <td><input type="number" name='unitPrice[]' min="1" value="0.00" step=".01"  placeholder='Enter unit price' class="form-control"/></td>
+          <tbody id="invoice-table-body">
+            <tr id="addr-0">
+              <td><input type="text" name='name[]' id="name-0" placeholder='Enter the item name' class="form-control"/></td>
+              <td><input type="number" name='unit[]' id="unit-0" min="1" value="1"  placeholder='Enter unit' class="form-control unit" data-index="0" /></td>
+              <td><input type="number" name='unitPrice[]' id="unit-price-0" min="0.01" value="0.00" step=".01"  placeholder='Enter unit price' class="form-control unitPrice" data-index="0" /></td>
               <td>
-                <select name='tax[]' class="form-control">
+                <select name='tax[]' id="tax-0" class="form-control tax" data-index="0" >
                   <option value="">Select Tax</option>
                   <option value="0">0%</option>
                   <option value="1">1%</option>
@@ -105,24 +105,21 @@
                   <option value="10">10%</option>
                 </select>
               </td>
-              <td><input type="text" name='amount[]'  placeholder='0.00' class="form-control" disabled/></td>
+              <td><input type="text" name='amount[]' id="amount-0"  placeholder='0.00' class="form-control" disabled/></td>
               <td>
-                <button type="button" class="btn btn-labeled btn-danger">
-                  <span class="btn-label"><em class="fa fa-trash"></em></span>
-                </button>
-                <button type="button" class="btn btn-labeled btn-info">
+                <button onclick="clearRow(0)" type="button" class="btn btn-labeled btn-info">
                   <span class="btn-label"><em class="fas fa-sync"></em></span>
                 </button>
               </td>
             </tr>
-            
+
           </tbody>
         </table>
       </div>
     </div>
     <div class="row clearfix">
       <div class="col-md-12">
-        <button id='delete_row' class="pull-right btn btn-default">
+        <button type="button" id='add-row' class="pull-right btn btn-default">
           <span class="btn-label"><em class="fas fa-plus-circle"></em></span> Add Row
         </button>
       </div>
@@ -150,7 +147,7 @@
                 <input type="number" name='subTotalWithOutTax' value='0.00' step=".01" class="form-control" id="sub-total-without-tax" disabled/>
               </td>
             </tr>
-           
+
             <tr>
               <th class="text-center">Subtotal with tax</th>
               <td class="text-center">
@@ -168,10 +165,11 @@
       <button type="button" class="btn btn-labeled btn-info">
         <span class="btn-label"><em class="fas fa-sync"></em></span> Refresh
       </button>
-    </div>
-   
+    </div><br><br>
+  </form>
   </div>
 
+  <script src="assets/js/bootstrap.min.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>
