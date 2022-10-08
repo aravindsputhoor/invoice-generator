@@ -7,6 +7,7 @@
   <title>Invoice Generator</title>
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/invoice-style.css">
   <link rel="stylesheet" href="assets/css/cmxform.css">
   <link href="assets/font-awesome/css/all.css" rel="stylesheet">
   <script src="assets/js/jquery.min.js"></script>
@@ -169,6 +170,85 @@
     </div><br><br>
   </form>
   </div>
+
+  <div id="invoiceholder">
+  <div id="invoice" class="effect2">
+
+    <div id="invoice-top">
+
+      <div class="title">
+        <h1>Invoice #<span class="invoiceVal invoice_num">tst-inv-23</span></h1>
+        <p>Invoice Date: <span id="invoice_date">01 Feb 2018</span>
+        </p>
+      </div>
+    </div>
+
+    <div id="invoice-mid">
+        <div class="clearfix">
+            <div class="col-left">
+                <p>BILL/SHIP TO:</p>
+                <div class="clientinfo">
+                    <h2 id="supplier">TESI S.P.A.</h2>
+                    <p><span id="address">VIA SAVIGLIANO, 48</span><br><span id="city">RORETO DI CHERASCO</span><br><span id="country">IT</span> - <span id="zip">12062</span><br><span id="tax_num">555-555-5555</span><br></p>
+                </div>
+            </div>
+            <div class="col-right">
+              <p>FROM:</p>
+              <div class="clientinfo">
+                  <h2 id="supplier">TESI S.P.A.</h2>
+                  <p><span id="address">VIA SAVIGLIANO, 48czdczdczascascascdacsacs</span><br><span id="city">RORETO DI CHERASCO</span><br><span id="country">IT</span> - <span id="zip">12062</span><br><span id="tax_num">555-555-5555</span><br></p>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="invoice-bot">
+      <div id="table">
+        <table class="table-main">
+          <thead>
+              <tr class="tabletitle">
+                <th>Type</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+          </thead>
+          <tr class="list-item">
+            <td data-label="Type" class="tableitem">ITEM</td>
+            <td data-label="Description" class="tableitem">Servizio EDI + Traffico mese di novembre 2017</td>
+            <td data-label="Quantity" class="tableitem">46.6</td>
+            <td data-label="Unit Price" class="tableitem">1</td>
+            <td data-label="Total" class="tableitem">55.92</td>
+          </tr>
+         <tr class="list-item">
+            <td data-label="Type" class="tableitem">ITEM</td>
+            <td data-label="Description" class="tableitem">Traffico mese di novembre 2017 FRESSNAPF TIERNAHRUNGS GMBH riadd. Almo DE</td>
+            <td data-label="Quantity" class="tableitem">4.4</td>
+            <td data-label="Unit Price" class="tableitem">1</td>
+            <td data-label="Total" class="tableitem">55.92</td>
+          </tr>
+        </table>
+      </div>
+
+      <br><div class="col-right">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td><span>Invoice Total</span><label id="invoice_total">61.2</label></td>
+                    <td><span>Currency</span><label id="currency">EUR</label></td>
+                </tr>
+                <tr>
+                    <td><span>Payment Term</span><label id="payment_term">60 gg DFFM</label></td>
+                    <td><span>Invoice Type</span><label id="invoice_type">EXP REP INV</label></td>
+                </tr>
+                <tr><td colspan="2"><span>Note</span>#<label id="note">None</label></td></tr>
+            </tbody>
+        </table>
+    </div><br>
+    </div>
+  </div>
+</div>
 
   <script src="assets/js/bootstrap.min.js"></script>
   <script src="assets/js/main.js"></script>
