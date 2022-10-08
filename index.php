@@ -7,6 +7,7 @@
   <title>Invoice Generator</title>
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/cmxform.css">
   <link href="assets/font-awesome/css/all.css" rel="stylesheet">
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/jquery.validate.min.js"></script>
@@ -33,7 +34,7 @@
             <tr>
               <th class="text-center">INVOICE DATE</th>
               <td class="text-center">
-                <input type="date" class="form-control" name='invoiceDate' id="invoice-date" max="<?=date('Y-m-d');?>" />
+                <input type="date" class="form-control" name='invoiceDate' id="invoice-date" max="<?=date('Y-m-d');?>" required />
               </td>
             </tr>
           </tbody>
@@ -45,13 +46,13 @@
             <tr>
               <th class="text-center">BILL/SHIP TO</th>
               <td class="text-center">
-                <input type="text" name='toName' placeholder='Enter name' class="form-control" id="to-name"/>
+                <input type="text" name='toName' placeholder='Enter name' class="form-control" id="to-name" required/>
               </td>
             </tr>
             <tr>
               <th class="text-center">ADDRESS</th>
               <td class="text-center">
-                <textarea name='toAddress' id="to-address" placeholder='Enter address' class="form-control"></textarea>
+                <textarea name='toAddress' id="to-address" placeholder='Enter address' class="form-control" required></textarea>
               </td>
             </tr>
           </tbody>
@@ -63,13 +64,13 @@
             <tr>
               <th class="text-center">FROM</th>
               <td class="text-center">
-                <input type="text" name='fromName' placeholder='Enter your company name' class="form-control" id="from-name"/>
+                <input type="text" name='fromName' placeholder='Enter your company name' class="form-control" id="from-name" required />
               </td>
             </tr>
             <tr>
               <th class="text-center">ADDRESS</th>
               <td class="text-center">
-                <textarea name='fromAddress' id="from-address" placeholder='Enter your company address' class="form-control"></textarea>
+                <textarea name='fromAddress' id="from-address" placeholder='Enter your company address' class="form-control" required ></textarea>
               </td>
             </tr>
           </tbody>
@@ -93,11 +94,11 @@
           </thead>
           <tbody id="invoice-table-body">
             <tr id="addr-0">
-              <td><input type="text" name='name[]' id="name-0" placeholder='Enter the item name' class="form-control"/></td>
-              <td><input type="number" name='unit[]' id="unit-0" min="1" value="1"  placeholder='Enter unit' class="form-control unit" data-index="0" /></td>
-              <td><input type="number" name='unitPrice[]' id="unit-price-0" min="0.01" value="0.00" step=".01"  placeholder='Enter unit price' class="form-control unitPrice" data-index="0" /></td>
+              <td><input type="text" name='name[]' id="name-0" placeholder='Enter the item name' class="form-control" required/></td>
+              <td><input type="number" name='unit[]' id="unit-0" min="1" value="1"  placeholder='Enter unit' class="form-control unit" data-index="0" required /></td>
+              <td><input type="number" name='unitPrice[]' id="unit-price-0" min="0.01" value="0.00" step=".01"  placeholder='Enter unit price' class="form-control unitPrice" data-index="0" required /></td>
               <td>
-                <select name='tax[]' id="tax-0" class="form-control tax" data-index="0" >
+                <select name='tax[]' id="tax-0" class="form-control tax" data-index="0" required >
                   <option value="">Select Tax</option>
                   <option value="0">0%</option>
                   <option value="1">1%</option>
@@ -137,7 +138,7 @@
                 </select>
               </th>
               <td class="text-center">
-                <input type="number" name='discountValue' id="discount-value" min="0" value='0' class="form-control"/>
+                <input type="number" name='discountValue' id="discount-value" min="0" value='0' max='100' class="form-control" required/>
               </td>
             </tr>
 
@@ -159,10 +160,10 @@
       </div>
     </div>
     <div class="text-center">
-      <button type="button" class="btn btn-labeled btn-success">
+      <button type="submit" class="btn btn-labeled btn-success">
         <span class="btn-label"><em class="fas fa-print"></em></span> Generate Invoice
       </button>
-      <button type="button" class="btn btn-labeled btn-info">
+      <button type="button" onClick="window.location.reload();" class="btn btn-labeled btn-info">
         <span class="btn-label"><em class="fas fa-sync"></em></span> Refresh
       </button>
     </div><br><br>

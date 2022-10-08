@@ -8,11 +8,43 @@ $(document).ready(function () {
     return num.toString().padStart(6, "0")
   };
   $('#invoice-number').val('IG' + getRandomId());
+
+  $.validator.setDefaults({
+		submitHandler: function() {
+			setInvoice();
+		}
+	});
+  $("#invoice-generator-form").validate({
+    rules: {
+      toName: {
+        required: true,
+				minlength: 3
+      },
+      toAddress: {
+        required: true,
+				minlength: 3
+      },
+      fromName: {
+        required: true,
+				minlength: 3
+      },
+      fromAddress: {
+        required: true,
+				minlength: 3
+      },
+      'name[]': {
+        required: true,
+				minlength: 3
+      },
+    },
+    messages: {}
+  });
+  
 });
 
 $("#add-row").click(function () {
   let index = i+1;
-  let rowHtml = '<tr id="addr-'+index+'"><td><input type="text" name="name[]" id="name-'+index+'" placeholder="Enter the item name" class="form-control"></td><td><input type="number" name="unit[]" id="unit-'+index+'" min="1" value="1" placeholder="Enter unit" class="form-control unit" data-index="'+index+'"></td><td><input type="number" name="unitPrice[]" id="unit-price-'+index+'" min="0.01" value="0.00" step=".01" placeholder="Enter unit price" class="form-control unitPrice" data-index="'+index+'"></td><td><select name="tax[]" id="tax-'+index+'" class="form-control tax" data-index="'+index+'"><option value="">Select Tax</option><option value="0">0%</option><option value="1">1%</option><option value="5">5%</option><option value="10">10%</option></select></td><td><input type="text" name="amount[]" id="amount-'+index+'" value="0.00" class="form-control amount" disabled="disabled"><input type="text" name="taxAmount[]" id="taxAmount-'+index+'" class="taxAmount" value="0.00" hidden /></td><td><button onclick="deleteRow('+index+')" type="button" class="btn btn-labeled btn-danger"><span class="btn-label"><em class="fa fa-trash"></em></span></button> <button onclick="clearRow('+index+')" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><em class="fas fa-sync"></em></span></button></td></tr>';
+  let rowHtml = '<tr id="addr-'+index+'"><td><input type="text" name="name[]" id="name-'+index+'" placeholder="Enter the item name" class="form-control"></td><td><input type="number" name="unit[]" id="unit-'+index+'" min="1" value="1" placeholder="Enter unit" class="form-control unit" data-index="'+index+'" required ></td><td><input type="number" name="unitPrice[]" id="unit-price-'+index+'" min="0.01" value="0.00" step=".01" placeholder="Enter unit price" class="form-control unitPrice" data-index="'+index+'" required ></td><td><select name="tax[]" id="tax-'+index+'" class="form-control tax" data-index="'+index+'" required ><option value="">Select Tax</option><option value="0">0%</option><option value="1">1%</option><option value="5">5%</option><option value="10">10%</option></select></td><td><input type="text" name="amount[]" id="amount-'+index+'" value="0.00" class="form-control amount" disabled="disabled"><input type="text" name="taxAmount[]" id="taxAmount-'+index+'" class="taxAmount" value="0.00" hidden /></td><td><button onclick="deleteRow('+index+')" type="button" class="btn btn-labeled btn-danger"><span class="btn-label"><em class="fa fa-trash"></em></span></button> <button onclick="clearRow('+index+')" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><em class="fas fa-sync"></em></span></button></td></tr>';
   $('#invoice-table-body').append(rowHtml);
   i++;
 });
@@ -25,10 +57,10 @@ function deleteRow(index) {
 function clearRow(index) {
   $('#name-'+index).val('');
   $('#unit-'+index).val(1);
-  $('#unit-price-'+index).val(0.00);
+  $('#unit-price-'+index).val('0.00');
   $('#tax-'+index).val('');
-  $('#amount-'+index).val(0.00);
-  $('#taxAmount-'+index).val(0.00);
+  $('#amount-'+index).val('0.00');
+  $('#taxAmount-'+index).val('0.00');
   subTotalCalc();
 }
 
@@ -53,8 +85,10 @@ $("#discount").change(function () {
   if(discount === 'PERCENTAGE') {
     $('#discount-value').val('0');
     $('#discount-value').removeAttr('step');
+    $('#discount-value').attr('max', '100');
   } else {
     $('#discount-value').val('0.00');
+    $('#discount-value').removeAttr('max');
     $('#discount-value').attr('step', '.01');
   }
   subTotalCalc();
@@ -107,5 +141,9 @@ function subTotalCalc() {
 
   $('#sub-total-without-tax').val(subTotalWithoutTax);
   $('#sub-total-with-tax').val(subTotalWithTax);
+}
+
+function setInvoice() {
+  alert('setInvoice');
 }
 
