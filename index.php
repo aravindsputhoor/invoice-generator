@@ -105,7 +105,7 @@
                   <option value="10">10%</option>
                 </select>
               </td>
-              <td><input type="text" name='amount[]' id="amount-0"  placeholder='0.00' class="form-control" disabled/></td>
+              <td><input type="text" name='amount[]' id="amount-0"  value='0.00' class="form-control amount" disabled/> <input type="text" name='taxAmount[]' id="taxAmount-0" value='0.00' class="taxAmount" hidden /></td>
               <td>
                 <button onclick="clearRow(0)" type="button" class="btn btn-labeled btn-info">
                   <span class="btn-label"><em class="fas fa-sync"></em></span>
@@ -137,7 +137,7 @@
                 </select>
               </th>
               <td class="text-center">
-                <input type="number" name='discountValue' id="discount-value" value='0.00' step=".01" class="form-control"/>
+                <input type="number" name='discountValue' id="discount-value" min="0" value='0' class="form-control"/>
               </td>
             </tr>
 
