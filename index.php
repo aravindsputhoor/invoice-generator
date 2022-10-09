@@ -7,26 +7,25 @@
   <title>Invoice Generator</title>
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/cmxform.css">
   <link href="assets/font-awesome/css/all.css" rel="stylesheet">
   <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/jquery.validate.min.js"></script>
+  <script src="assets/js/just-validate.production.min.js"></script>
 </head>
 <body>
   <nav class = "navbar navbar-default" role = "navigation">
       <div class = "navbar-header">
-        <a class = "navbar-brand">Invoice Generator</a>
+        <a class = "navbar-brand"><b>Invoice Generator</b></a>
       </div>
   </nav>
 
   <div class="container">
-    <form id="invoice-generator-form">
+    <form id="invoice-generator-form" class="commentForm">
     <div class="row clearfix mt-2">
       <div class="col-md-4">
         <table class="table table-bordered table-hover" id="tab_logic_total">
           <tbody>
             <tr>
-              <th class="text-center">INVOICE NO</th>
+              <th class="text-center">INVOICE ID</th>
               <td class="text-center">
                 <input type="text" name='invoiceNumber' class="form-control" id="invoice-number" disabled/>
               </td>
@@ -94,7 +93,7 @@
           </thead>
           <tbody id="invoice-table-body">
             <tr id="addr-0">
-              <td><input type="text" name='name[]' id="name-0" placeholder='Enter the item name' class="form-control" required/></td>
+              <td><input type="text" name='name[]' id="name-0" placeholder='Enter the item name' class="form-control name" required/></td>
               <td><input type="number" name='unit[]' id="unit-0" min="1" value="1"  placeholder='Enter unit' class="form-control unit" data-index="0" required /></td>
               <td><input type="number" name='unitPrice[]' id="unit-price-0" min="0.01" value="0.00" step=".01"  placeholder='Enter unit price' class="form-control unitPrice" data-index="0" required /></td>
               <td>
@@ -107,10 +106,10 @@
                 </select>
               </td>
               <td><input type="text" name='amount[]' id="amount-0"  value='0.00' class="form-control amount" disabled/> <input type="text" name='taxAmount[]' id="taxAmount-0" value='0.00' class="taxAmount" hidden /></td>
-              <td>
-                <button onclick="clearRow(0)" type="button" class="btn btn-labeled btn-info">
+              <td><div class="d-flex">
+                <button onclick="clearRow(0)" type="button" class="btn btn-labeled btn-info btn-xs m-1" data-toggle="tooltip" title="Clear">
                   <span class="btn-label"><em class="fas fa-sync"></em></span>
-                </button>
+                </button></div>
               </td>
             </tr>
 
@@ -160,7 +159,7 @@
       </div>
     </div>
     <div class="text-center">
-      <button type="submit" class="btn btn-labeled btn-success">
+      <button type="submit" id="submit-invoice" class="btn btn-labeled btn-success">
         <span class="btn-label"><em class="fas fa-print"></em></span> Generate Invoice
       </button>
       <button type="button" onClick="window.location.reload();" class="btn btn-labeled btn-info">
@@ -235,8 +234,13 @@
     </div>
   </div>
 </div>
-</div>
+</div><br><br>
 <!----Invoice temp end--->
+<footer class="footer">
+    <div class="container">
+      <span class="text-muted">@2022 Invoice Generator - <a href="https://www.linkedin.com/in/aravindsputhoor" target="_blank">Aravind S</a></span>
+    </div>
+</footer>
 
   <script src="assets/js/bootstrap.min.js"></script>
   <script src="assets/js/moment.min.js"></script>

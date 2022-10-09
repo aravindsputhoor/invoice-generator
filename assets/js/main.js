@@ -1,6 +1,7 @@
 let i = 0;
 
 $(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip();
   const getRandomId = (min = 0, max = 500000) => {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -9,80 +10,177 @@ $(document).ready(function () {
   };
   $('#invoice-number').val('IG-' + getRandomId());
 
-  $.validator.setDefaults({
-		submitHandler: function() {
-			setInvoice();
-		}
-	});
-  $("#invoice-generator-form").validate({
-    rules: {
-      toName: {
-        required: true,
-				minlength: 3
-      },
-      toAddress: {
-        required: true,
-				minlength: 3
-      },
-      fromName: {
-        required: true,
-				minlength: 3
-      },
-      fromAddress: {
-        required: true,
-				minlength: 3
-      },
-      'name[]': {
-        required: true,
-				minlength: 3
-      },
-    },
-    messages: {}
-  });
-  
 });
 
-$("#add-row").click(function () {
-  let index = i+1;
-  let rowHtml = '<tr id="addr-'+index+'"><td><input type="text" name="name[]" id="name-'+index+'" placeholder="Enter the item name" class="form-control"></td><td><input type="number" name="unit[]" id="unit-'+index+'" min="1" value="1" placeholder="Enter unit" class="form-control unit" data-index="'+index+'" required ></td><td><input type="number" name="unitPrice[]" id="unit-price-'+index+'" min="0.01" value="0.00" step=".01" placeholder="Enter unit price" class="form-control unitPrice" data-index="'+index+'" required ></td><td><select name="tax[]" id="tax-'+index+'" class="form-control tax" data-index="'+index+'" required ><option value="">Select Tax</option><option value="0">0%</option><option value="1">1%</option><option value="5">5%</option><option value="10">10%</option></select></td><td><input type="text" name="amount[]" id="amount-'+index+'" value="0.00" class="form-control amount" disabled="disabled"><input type="text" name="taxAmount[]" id="taxAmount-'+index+'" class="taxAmount" value="0.00" hidden /></td><td><button onclick="deleteRow('+index+')" type="button" class="btn btn-labeled btn-danger"><span class="btn-label"><em class="fa fa-trash"></em></span></button> <button onclick="clearRow('+index+')" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><em class="fas fa-sync"></em></span></button></td></tr>';
+let validation = new window.JustValidate('#invoice-generator-form');
+
+validation.addField('#to-name', [
+  {
+    rule: 'required'
+  },
+  {
+    rule: 'minLength',
+    value: 3,
+  },
+  {
+    rule: 'maxLength',
+    value: 30,
+  },
+])
+  .addField('#to-address', [
+    {
+      rule: 'required'
+    },
+    {
+      rule: 'minLength',
+      value: 3,
+    },])
+  .addField('#from-name', [
+    {
+      rule: 'required'
+    },
+    {
+      rule: 'minLength',
+      value: 3,
+    },
+    {
+      rule: 'maxLength',
+      value: 30,
+    },])
+  .addField('#from-address', [
+    {
+      rule: 'required'
+    },
+    {
+      rule: 'minLength',
+      value: 3,
+    },])
+  .addField('#invoice-date', [
+    {
+      rule: 'required'
+    }
+  ])
+  .addField('#name-0', [
+    {
+      rule: 'required'
+    },
+    {
+      rule: 'minLength',
+      value: 3,
+    },
+    {
+      rule: 'maxLength',
+      value: 30,
+    },
+  ])
+  .addField('#unit-0', [
+    {
+      rule: 'required'
+    }
+  ])
+  .addField('#unit-price-0', [
+    {
+      rule: 'required'
+    }
+  ])
+  .addField('#tax-0', [
+    {
+      rule: 'required'
+    }
+  ])
+  .onSuccess((ev) => {
+    ev?.preventDefault();
+    setInvoice();
+  });
+
+
+$("#add-row").click(function (e) {
+  let index = i + 1;
+  let rowHtml = '<tr id="addr-' + index + '"><td><input type="text" name="name[]" id="name-' + index + '" placeholder="Enter the item name" id="name-' + index + '" class="form-control name" required></td><td><input type="number" name="unit[]" id="unit-' + index + '" min="1" value="1" placeholder="Enter unit" class="form-control unit" data-index="' + index + '" required ></td><td><input type="number" name="unitPrice[]" id="unit-price-' + index + '" min="0.01" value="0.00" step=".01" placeholder="Enter unit price" class="form-control unitPrice" data-index="' + index + '" required ></td><td><select name="tax[]" id="tax-' + index + '" class="form-control tax" data-index="' + index + '" required ><option value="">Select Tax</option><option value="0">0%</option><option value="1">1%</option><option value="5">5%</option><option value="10">10%</option></select></td><td><input type="text" name="amount[]" id="amount-' + index + '" value="0.00" class="form-control amount" disabled="disabled"><input type="text" name="taxAmount[]" id="taxAmount-' + index + '" class="taxAmount" value="0.00" hidden /></td><td><div class="d-flex"><button onclick="deleteRow(' + index + ')" type="button" class="btn btn-labeled btn-danger btn-xs m-1" data-toggle="tooltip" title="Delete"><span class="btn-label"><em class="fa fa-trash"></em></span></button> <button onclick="clearRow(' + index + ')" type="button" class="btn btn-labeled btn-info btn-xs m-1" data-toggle="tooltip" title="Clear"><span class="btn-label"><em class="fas fa-sync"></em></span></button></div></td></tr>';
   $('#invoice-table-body').append(rowHtml);
+
+  $('input.name').each(function () {
+    validation.addField('#' + this.id, [
+      {
+        rule: 'required'
+      },
+      {
+        rule: 'minLength',
+        value: 3,
+      },
+      {
+        rule: 'maxLength',
+        value: 30,
+      },
+    ]);
+  });
+
+  $('input.unit').each(function () {
+    validation.addField('#' + this.id, [
+      {
+        rule: 'required'
+      }
+    ]);
+  });
+
+  $('input.unitPrice').each(function () {
+    validation.addField('#' + this.id, [
+      {
+        rule: 'required'
+      }
+    ]);
+  });
+
+  $('select.tax').each(function () {
+    validation.addField('#' + this.id, [
+      {
+        rule: 'required'
+      }
+    ]);
+  });
+
   i++;
+  $('[data-toggle="tooltip"]').tooltip();
 });
 
 function deleteRow(index) {
-  $("#addr-"+index).remove();
+  $("#addr-" + index).remove();
+  validation.removeField('#name-' + index);
+  validation.removeField('#unit-' + index);
+  validation.removeField('#unit-price-' + index);
+  validation.removeField('#tax-' + index);
   subTotalCalc();
 }
 
 function clearRow(index) {
-  $('#name-'+index).val('');
-  $('#unit-'+index).val(1);
-  $('#unit-price-'+index).val('0.00');
-  $('#tax-'+index).val('');
-  $('#amount-'+index).val('0.00');
-  $('#taxAmount-'+index).val('0.00');
+  $('#name-' + index).val('');
+  $('#unit-' + index).val(1);
+  $('#unit-price-' + index).val('0.00');
+  $('#tax-' + index).val('');
+  $('#amount-' + index).val('0.00');
+  $('#taxAmount-' + index).val('0.00');
   subTotalCalc();
 }
 
-$("body").on("keyup change", ".unit", function(e) {
-  let index = $('#'+e.target.id).attr("data-index");
+$("body").on("keyup change", ".unit", function (e) {
+  let index = $('#' + e.target.id).attr("data-index");
   totalAmountCalc(index);
 });
-$("body").on("keyup change", ".unitPrice", function(e) {
-  let index = $('#'+e.target.id).attr('data-index');
+$("body").on("keyup change", ".unitPrice", function (e) {
+  let index = $('#' + e.target.id).attr('data-index');
   totalAmountCalc(index);
 });
-$("body").on("keyup change", ".tax", function(e) {
-  let index = $('#'+e.target.id).attr('data-index');
+$("body").on("keyup change", ".tax", function (e) {
+  let index = $('#' + e.target.id).attr('data-index');
   totalAmountCalc(index);
 });
-$("#discount-value").on("keyup change", function(e) {
+$("#discount-value").on("keyup change", function (e) {
   subTotalCalc();
 });
 
 $("#discount").change(function () {
   let discount = $(this).val();
-  if(discount === 'PERCENTAGE') {
+  if (discount === 'PERCENTAGE') {
     $('#discount-value').val('0');
     $('#discount-value').removeAttr('step');
     $('#discount-value').attr('max', '100');
@@ -97,18 +195,18 @@ $("#discount").change(function () {
 function totalAmountCalc(index) {
   let totalAmount = 0.00;
   let taxAmount = 0.00;
-  let unit = ($('#unit-'+index).val() == '') ? 0 : parseInt($('#unit-'+index).val());
-  let unitPrice = ($('#unit-price-'+index).val() == '') ? 0.00 : parseFloat($('#unit-price-'+index).val());
-  let tax = ($('#tax-'+index).val() == '') ? 0 : parseInt($('#tax-'+index).val());
+  let unit = ($('#unit-' + index).val() == '') ? 0 : parseInt($('#unit-' + index).val());
+  let unitPrice = ($('#unit-price-' + index).val() == '') ? 0.00 : parseFloat($('#unit-price-' + index).val());
+  let tax = ($('#tax-' + index).val() == '') ? 0 : parseInt($('#tax-' + index).val());
   totalAmount = unit * unitPrice;
-  if(tax != 0) {
-    taxAmount = (tax/100) * totalAmount;
+  if (tax != 0) {
+    taxAmount = (tax / 100) * totalAmount;
     totalAmount = taxAmount + totalAmount;
   }
   taxAmount = parseFloat(taxAmount).toFixed(2);
   totalAmount = parseFloat(totalAmount).toFixed(2);
-  $('#amount-'+index).val(totalAmount);
-  $('#taxAmount-'+index).val(taxAmount);
+  $('#amount-' + index).val(totalAmount);
+  $('#taxAmount-' + index).val(taxAmount);
   subTotalCalc();
 }
 
@@ -118,8 +216,8 @@ function subTotalCalc() {
   let subTotalWithTax = 0.00;
   let totalTax = 0.00;
 
-  let subTotalWithTaxArray = $("input[name='amount[]']").map(function(){return $(this).val();}).get();
-  let totalTaxArray = $("input[name='taxAmount[]']").map(function(){return $(this).val();}).get();
+  let subTotalWithTaxArray = $("input[name='amount[]']").map(function () { return $(this).val(); }).get();
+  let totalTaxArray = $("input[name='taxAmount[]']").map(function () { return $(this).val(); }).get();
   $.each(subTotalWithTaxArray, function (i) {
     subTotalWithTax = subTotalWithTax + parseFloat(subTotalWithTaxArray[i]);
   });
@@ -127,10 +225,10 @@ function subTotalCalc() {
     totalTax = totalTax + parseFloat(totalTaxArray[j]);
   });
   let subTotalWithoutTax = subTotalWithTax - totalTax;
-  
-  if(discount === 'PERCENTAGE') {
-    subTotalWithoutTax = subTotalWithoutTax - (subTotalWithoutTax * (discountValue/100));
-    subTotalWithTax = subTotalWithTax - (subTotalWithTax * (discountValue/100));
+
+  if (discount === 'PERCENTAGE') {
+    subTotalWithoutTax = subTotalWithoutTax - (subTotalWithoutTax * (discountValue / 100));
+    subTotalWithTax = subTotalWithTax - (subTotalWithTax * (discountValue / 100));
   } else {
     subTotalWithoutTax = subTotalWithoutTax - discountValue;
     subTotalWithTax = subTotalWithTax - discountValue;
@@ -145,17 +243,17 @@ function subTotalCalc() {
 
 function setInvoiceValues() {
   let tableHtml = '';
-  let name = $("input[name='name[]']").map(function(){return $(this).val();}).get();
-  let unit = $("input[name='unit[]']").map(function(){return $(this).val();}).get();
-  let unitPrice = $("input[name='unitPrice[]']").map(function(){return $(this).val();}).get();
-  let tax = $("select[name='tax[]']").map(function(){
+  let name = $("input[name='name[]']").map(function () { return $(this).val(); }).get();
+  let unit = $("input[name='unit[]']").map(function () { return $(this).val(); }).get();
+  let unitPrice = $("input[name='unitPrice[]']").map(function () { return $(this).val(); }).get();
+  let tax = $("select[name='tax[]']").map(function () {
     return $(this).val();
   }).get();
-  let amount = $("input[name='amount[]']").map(function(){return $(this).val();}).get();
-  
+  let amount = $("input[name='amount[]']").map(function () { return $(this).val(); }).get();
+
   $.each(amount, function (i) {
-    let j= i+1;
-    tableHtml += '<tr class="list-item"><td data-label="no" class="tableitem">'+j+'</td><td data-label="name" class="tableitem">'+name[i]+'</td><td data-label="unit" class="tableitem">'+unit[i]+'</td><td data-label="unitPrice" class="tableitem">$ '+unitPrice[i]+'</td><td data-label="tax" class="tableitem">'+tax[i]+' %</td><td data-label="no" class="tableitem">$ '+amount[i]+'</td></tr>';
+    let j = i + 1;
+    tableHtml += '<tr class="list-item"><td data-label="no" class="tableitem">' + j + '</td><td data-label="name" class="tableitem">' + name[i] + '</td><td data-label="unit" class="tableitem">' + unit[i] + '</td><td data-label="unitPrice" class="tableitem">$ ' + unitPrice[i] + '</td><td data-label="tax" class="tableitem">' + tax[i] + ' %</td><td data-label="no" class="tableitem">$ ' + amount[i] + '</td></tr>';
   });
   $('#table-main').html(tableHtml);
   $('#invoiceNumber').html($('#invoice-number').val());
@@ -166,14 +264,14 @@ function setInvoiceValues() {
   $('#fromName').html($('#from-name').val());
   $('#fromAddress').html($('#from-address').val());
   let discount = $('#discount').val();
-  if(discount === 'PERCENTAGE') {
-    $('#discount-value-print').html($('#discount-value').val()+ ' %');
+  if (discount === 'PERCENTAGE') {
+    $('#discount-value-print').html($('#discount-value').val() + ' %');
   } else {
-    $('#discount-value-print').html('$ ' +$('#discount-value').val());
+    $('#discount-value-print').html('$ ' + $('#discount-value').val());
   }
 
-  $('#sub-total-without-tax-print').html('$ ' +$('#sub-total-without-tax').val());
-  $('#sub-total-with-tax-print').html('$ ' +$('#sub-total-with-tax').val());
+  $('#sub-total-without-tax-print').html('$ ' + $('#sub-total-without-tax').val());
+  $('#sub-total-with-tax-print').html('$ ' + $('#sub-total-with-tax').val());
 }
 
 function setInvoice() {
